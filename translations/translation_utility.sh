@@ -3,12 +3,12 @@
 echo -ne "
     ╔══════════════════════════════════════╗
     ║                                      ║
-    ║ Linux/MacOS Translation utility 0.9  ║
+    ║ Linux/MacOS Translation utility 1.0  ║
     ║     Powered by David Copperfield     ║
     ║           A MuseScore User           ║
     ║                                      ║
     ╚══════════════════════════════════════╝\n\n"
-
+# Functions
 function Countdown() { # Countdown timer, format: Countdown [time in sec]
     _countdown=$1
     while [[ $_countdown -gt 0 ]]; do
@@ -39,7 +39,10 @@ function Confirmation() { # Process Yes/No/Quit response
         esac
     done
 }
+# Functions End 
 
+# ===== Modules ====
+Check_bin(){ #Check if the bin path exists
 bin_path=$HOME/Qt/5.15.2/clang_64/bin # Default bin path
 
 until [[ -d $bin_path ]]; do # Find the default bin path
@@ -50,8 +53,8 @@ until [[ -d $bin_path ]]; do # Find the default bin path
 done
 
 export PATH="$PATH":$bin_path # Set user defined bin path
-
-Lupdate() {
+}
+Lupdate() { # Generating/Updating .ts files
     while :; do
         read -rp "Input your language code: "
         case $REPLY in
@@ -77,12 +80,16 @@ Lupdate() {
     return
 }
 
-Lrelease() {
+Lrelease() { # Generating/Updating .qm files
     cd $(dirname $0)
     echo lrelease *.ts
     lrelease *.ts
+    return
 }
+# Module End
+###########
 Main() {
+    Check_bin
     while :; do
         echo -e "Choose the mode:\n1. Generate .ts files.\n2. Update .qm files."
         read
