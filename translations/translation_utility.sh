@@ -51,29 +51,58 @@ done
 
 export PATH="$PATH":$bin_path # Set user defined bin path
 
-while :; do
-    read -rp "Input your language code: "
-    case $REPLY in
-    \* | all) # Update all existed .ts files
-        ts_name=$(find . -name "*.ts")
-        echo -e "You are updating\033[33m all existed .ts files\033[0m."
-        ;;
-    "") # Avoid mis-press the Enter
-        continue
-        ;;
-    *)
-        ts_name=./locale_${REPLY}.ts
-        # ts_name+=$REPLY
-        echo -e "Your ts file name is \033[33m${ts_name}\033[0m"
-        ;;
-    esac
-    Confirmation
-    if [[ $? -eq 3 ]]; then break; fi
-done
-echo Generating ${ts_name}
-cd $(dirname $0)
-lupdate .. -no-obsolete -locations absolute -ts ${ts_name}
-sleep 1
-echo -e "\033[32mFinished\033[0m"
-Countdown 10
-exit
+Lupdate() {
+    while :; do
+        read -rp "Input your language code: "
+        case $REPLY in
+        \* | all) # Update all existed .ts files
+            ts_name=$(find . -name "*.ts")
+            echo -e "You are updating\033[33m all existed .ts files\033[0m."
+            ;;
+        "") # Avoid mis-press the Enter
+            continue
+            ;;
+        *)
+            ts_name=./locale_${REPLY}.ts
+            # ts_name+=$REPLY
+            echo -e "Your ts file name is \033[33m${ts_name}\033[0m"
+            ;;
+        esac
+        Confirmation
+        if [[ $? -eq 3 ]]; then break; fi
+    done
+    echo Generating ${ts_name}
+    cd $(dirname $0)
+    lupdate .. -no-obsolete -locations absolute -ts ${ts_name}
+    return
+}
+
+Lrelease() {
+    cd $(dirname $0)
+    echo lrelease *.ts
+    lrelease *.ts
+}
+Main() {
+    while :; do
+        echo -e "Choose the mode:\n1. Generate .ts files.\n2. Update .qm files."
+        read
+        case $REPLY in
+        1 | lupdate)
+            Lupdate
+            break
+            ;;
+        2 | lrelease)
+            Lrelease
+            break
+            ;;
+        *)
+            continue
+            ;;
+        esac
+    done
+    sleep 1
+    echo -e "\033[32mFinished\033[0m"
+    Countdown 10
+    exit
+}
+Main
