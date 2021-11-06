@@ -21,14 +21,18 @@ function Countdown() {
     done
 }
 
-excute_path=/$HOME/Qt/5.15.2/clang_64/bin
+bin_path=$HOME/Qt/5.15.2/clang_64/bin
 
-until [[ -d $excute_path ]]; do
+until [[ -d $bin_path ]]; do
     echo -ne "\n=========\n\033[31mPath to lrelease not found.\033[0m\nPlease provide a path to /Qt/(version)/clang_64/bin.\n"
-    read excute_path
+    read bin_path
 done
-echo ${excute_path}/lrelease /*.ts
-${excute_path}/lrelease ${this_location}/*.ts
+
+export PATH="$PATH":$bin_path
+
+echo lrelease /*.ts
+
+lrelease ${this_location}/*.ts
 
 echo finished
 Countdown 10
