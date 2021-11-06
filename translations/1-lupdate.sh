@@ -3,16 +3,17 @@
 echo -ne "
     ╔══════════════════════════════════════╗
     ║                                      ║
+    ║ Linux/MacOS Translation utility 0.9  ║
     ║     Powered by David Copperfield     ║
     ║           A MuseScore User           ║
     ║                                      ║
     ╚══════════════════════════════════════╝\n\n"
 
 function Countdown() { # Countdown timer, format: Countdown [time in sec]
-    countdown=$1
-    while [[ $countdown -gt 0 ]]; do
-        echo -ne "The programme will exit in $countdown sec."
-        ((countdown--))
+    _countdown=$1
+    while [[ $_countdown -gt 0 ]]; do
+        echo -ne "The programme will exit in $_countdown sec."
+        ((_countdown--))
         sleep 1 #time interval
         echo -ne "\r"
     done
@@ -39,7 +40,6 @@ function Confirmation() { # Process Yes/No/Quit response
     done
 }
 
-cd $(dirname $0)
 bin_path=$HOME/Qt/5.15.2/clang_64/bin # Default bin path
 
 until [[ -d $bin_path ]]; do # Find the default bin path
@@ -71,7 +71,8 @@ while :; do
     if [[ $? -eq 3 ]]; then break; fi
 done
 echo Generating ${ts_name}
-lupdate ../ -no-obsolete -locations absolute -ts ${ts_name}
+cd $(dirname $0)
+lupdate .. -no-obsolete -locations absolute -ts ${ts_name}
 sleep 1
 echo -e "\033[32mFinished\033[0m"
 Countdown 10
