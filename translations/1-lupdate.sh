@@ -71,7 +71,7 @@ while :; do
     if [[ $? -eq 3 ]]; then break; fi
 done
 echo Generating ${ts_name}
-lupdate ../ -no-obsolete -locations relative -ts ${ts_name}
+lupdate ../ -no-obsolete -locations absolute -ts ${ts_name}
 sleep 1
 echo -e "\033[32mFinished\033[0m"
 Countdown 10
