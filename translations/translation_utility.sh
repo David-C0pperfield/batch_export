@@ -26,7 +26,7 @@ function Confirmation() { # Process Yes/No/Quit response
         [Yy]* | [Oo][Kk] | 1) # Approved
             return 3
             ;;
-        [Qq]uit* | [Ee]sc* | -1) # Leave
+        [Qq]uit* | [Ee]sc* | [Ee]xit | -1) # Leave
             Countdown 5
             exit
             ;;
@@ -39,20 +39,20 @@ function Confirmation() { # Process Yes/No/Quit response
         esac
     done
 }
-# Functions End 
+# Functions End
 
 # ===== Modules ====
-Check_bin(){ #Check if the bin path exists
-bin_path=$HOME/Qt/5.15.2/clang_64/bin # Default bin path
+Check_bin() {                             #Check if the bin path exists
+    bin_path=$HOME/Qt/5.15.2/clang_64/bin # Default bin path
 
-until [[ -d $bin_path ]]; do # Find the default bin path
-    echo =========
-    echo -e "\033[31mPath to lupdate not found.\033[0m"
-    echo -e "Please provide a path to /Qt/(version)/clang_64/bin."
-    read bin_path
-done
+    until [[ -d $bin_path ]]; do # Find the default bin path
+        echo =========
+        echo -e "\033[31mPath to lupdate not found.\033[0m"
+        echo -e "Please provide a path to /Qt/(version)/clang_64/bin."
+        read bin_path
+    done
 
-export PATH="$PATH":$bin_path # Set user defined bin path
+    export PATH="$PATH":$bin_path # Set user defined bin path
 }
 Lupdate() { # Generating/Updating .ts files
     while :; do
@@ -101,6 +101,9 @@ Main() {
         2 | lrelease)
             Lrelease
             break
+            ;;
+        [Qq]uit* | [Ee]sc* | [Ee]xit | -1)
+            exit
             ;;
         *)
             continue
