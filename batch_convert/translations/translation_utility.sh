@@ -59,6 +59,22 @@ function Confirmation() { # Process Yes/No/Quit response
         esac
     done
 }
+
+
+function get_qt_version(){
+    # This function can get qt version via directory
+    # Return: an array of version number in case there are multiple version
+    local pattern="*.*.*"  # Pattern to match QT version
+    cd "$HOME/Qt/" || exit # Go to QT directory
+    items=()
+    for e in *; do
+        case "$e" in
+            $pattern)
+                items+=("$e")
+                ;;
+        esac
+    done
+}
 # Functions End
 
 # ===== Modules ====
@@ -72,20 +88,20 @@ CheckBinPath() { # Check if the bin path exists
         ### Default bin path for each system here ###
         # macOS
         Darwin)
-            _clang_path=$HOME/Qt/"$qt_ver"/clang_64
+            clang_path=$HOME/Qt/"$qt_ver"/clang_64
             ;;
         Linux)
             echo "Default path support for Linux will be added in the future."
             ;;
         esac
-        until [[ -d $_clang_path ]]; do # Confirm the existence of the default path
+        until [[ -d $clang_path ]]; do # Confirm the existence of the default path
             echo ===========
             echo -e "\033[31mPath to lupdate / lrelease not found.\033[0m This utility requires lupdate / lrelease."
             echo -e "Please provide a path to the location of the \033[33mQt/\033[37m%VERSION%\033[33m/clang_64\033[0m folder."
-            read -p "   " _clang_path
+            read -p "   " clang_path
         done
         # Configuring the temporary $PATH
-        export QTDIR=$PATH:_clang_path
+        export QTDIR=$PATH:clang_path
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$QTDIR/lib
         export PATH=$PATH:$QTDIR/bin
     fi
@@ -181,4 +197,5 @@ Main() {
     exit
 }
 
-Main
+# Main
+get_qt_version
