@@ -63,10 +63,9 @@ function Confirmation() { # Process Yes/No/Quit response
 
 # ===== Modules ====
 qt_ver=5.15.2
-
 CheckBinPath() { # Check if the bin path exists
-    _bin_exists=$(/usr/bin/env lupdate 2>/dev/null)
-    if [[ $_bin_exists ]]; then # if detected then continue
+    does_lupdate_exist=$(/usr/bin/env lupdate 2>/dev/null)
+    if [[ $does_lupdate_exist ]]; then # if detected then continue
         return
     else
         case $(uname -s) in
@@ -182,4 +181,4 @@ Main() {
     exit
 }
 
-# Main
+Main
