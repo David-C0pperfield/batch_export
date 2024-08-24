@@ -1,17 +1,24 @@
 #!/bin/bash
-# You may add your name if you have contributed to this file.
-echo -e "
-    ╔══════════════════════════════════════╗
-    ║                                      ║
-    ║  Linux/macOS Translation utility 1.0 ║
-    ║     Powered by David Copperfield     ║
-    ║             Jojo-Schmitz             ║
-    ║                 2024                 ║
-    ║                                      ║
-    ╚══════════════════════════════════════╝"
+
 
 # Functions
-function Line() {              # Draw lines across the screen
+function display_title(){
+    # Display title
+    # You may add your name if you have contributed to this file.
+    echo -e "
+        ╔══════════════════════════════════════╗
+        ║                                      ║
+        ║  Linux/macOS Translation utility 1.0 ║
+        ║     Powered by David Copperfield     ║
+        ║             Jojo-Schmitz             ║
+        ║                 2024                 ║
+        ║                                      ║
+        ╚══════════════════════════════════════╝"
+}
+
+
+function Line() {
+    # Draw lines across the screen
     _window_width=$(tput cols) # Detect terminal width
     _style=$1                  # The style of the line e.g, ---, ====, etc.
     echo
@@ -22,7 +29,8 @@ function Line() {              # Draw lines across the screen
 }
 
 
-function Countdown() { # Countdown timer, format: Countdown [time in sec]
+function Countdown() {
+    # Countdown timer, format: Countdown [time in sec]
     _countdown=$1
     while [[ $_countdown -gt 0 ]]; do
         echo -ne "The programme will exit in $_countdown sec."
@@ -33,7 +41,8 @@ function Countdown() { # Countdown timer, format: Countdown [time in sec]
 }
 
 
-function Confirmation() { # Process Yes/No/Quit response
+function Confirmation() {
+    # Process Yes/No/Quit response
     while :; do
         echo -e "Confirm? (y/n) "
         read -p "   "
@@ -75,8 +84,9 @@ function get_qt_version(){
         esac
     done
 }
-# Functions End
 
+
+# Functions End
 # ===== Modules ====
 qt_ver=5.15.2
 CheckBinPath() { # Check if the bin path exists
@@ -86,13 +96,13 @@ CheckBinPath() { # Check if the bin path exists
     else
         case $(uname -s) in
         ### Default bin path for each system here ###
-        # macOS
-        Darwin)
-            clang_path=$HOME/Qt/"$qt_ver"/clang_64
-            ;;
-        Linux)
-            echo "Default path support for Linux will be added in the future."
-            ;;
+            # macOS
+            Darwin)
+                clang_path=$HOME/Qt/"$qt_ver"/clang_64
+                ;;
+            Linux)
+                echo "Default path support for Linux will be added in the future."
+                ;;
         esac
         until [[ -d $clang_path ]]; do # Confirm the existence of the default path
             echo ===========
@@ -109,6 +119,7 @@ CheckBinPath() { # Check if the bin path exists
     return
 }
 
+
 OpenLinguist() {
     echo -e Opening Linguist for
     for ts_file in "$@"; do
@@ -117,6 +128,7 @@ OpenLinguist() {
     done
     return
 }
+
 
 Lupdate() { # Generating/Updating .ts files
     while :; do
@@ -158,12 +170,15 @@ You can create multiple .ts files by separating lang codes with space.\n"
     return
 }
 
+
 Lrelease() { # Generating/Updating .qm files
     cd $(dirname $0)
     echo "lrelease *.ts"
     lrelease *.ts
     return
 }
+
+
 # Module End
 ###########
 Main() {
@@ -196,6 +211,7 @@ Main() {
     Countdown 30
     exit
 }
+
 
 # Main
 get_qt_version
