@@ -182,26 +182,27 @@ Lrelease() { # Generating/Updating .qm files
 # Module End
 ###########
 Main() {
+    display_title
     CheckBinPath
     while :; do
         echo -e "Choose the mode:\n1. Generate .ts files.\n2. Update .qm files."
         read -p "   "
         Line "="
         case $REPLY in
-        1 | lupdate)
-            Lupdate
-            break
-            ;;
-        2 | lrelease)
-            Lrelease
-            break
-            ;;
-        [Qq]uit* | [Ee]* | -1)
-            exit
-            ;;
-        *)
-            continue
-            ;;
+            1 | lupdate)
+                Lupdate
+                break
+                ;;
+            2 | lrelease)
+                Lrelease
+                break
+                ;;
+            [Qq]uit* | [Ee]* | -1)
+                exit
+                ;;
+            *)
+                continue
+                ;;
         esac
     done
     # End of loop
