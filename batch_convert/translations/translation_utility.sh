@@ -6,6 +6,7 @@ echo -e "
     ║  Linux/macOS Translation utility 1.0 ║
     ║     Powered by David Copperfield     ║
     ║             Jojo-Schmitz             ║
+    ║                 2024                 ║
     ║                                      ║
     ╚══════════════════════════════════════╝"
 
@@ -19,6 +20,8 @@ function Line() {              # Draw lines across the screen
     done
     echo -e "\n"
 }
+
+
 function Countdown() { # Countdown timer, format: Countdown [time in sec]
     _countdown=$1
     while [[ $_countdown -gt 0 ]]; do
@@ -28,25 +31,31 @@ function Countdown() { # Countdown timer, format: Countdown [time in sec]
         echo -ne "\r"
     done
 }
+
+
 function Confirmation() { # Process Yes/No/Quit response
     while :; do
         echo -e "Confirm? (y/n) "
         read -p "   "
         echo
         case ${REPLY} in
-        [Yy]* | [Oo][Kk] | 1) # Approved
-            return 3
-            ;;
-        [Qq]uit* | [Ee]sc* | [Ee]xit | -1) # Leave
-            Countdown 5
-            exit
-            ;;
-        "") # Avoid mis-press the Enter
-            continue
-            ;;
-        *) # Not confirmed
-            return
-            ;;
+            # Approved
+            [Yy]* | [Oo][Kk] | 1) 
+                return 3
+                ;;
+            # Leave
+            [Qq]uit* | [Ee]sc* | [Ee]xit | -1)
+                Countdown 5
+                exit
+                ;;
+            # Avoid empty input
+            "")
+                continue
+                ;;
+            # No / Not confirmed
+            *)
+                return
+                ;;
         esac
     done
 }
@@ -54,6 +63,7 @@ function Confirmation() { # Process Yes/No/Quit response
 
 # ===== Modules ====
 qt_ver=5.15.2
+
 CheckBinPath() { # Check if the bin path exists
     _bin_exists=$(/usr/bin/env lupdate 2>/dev/null)
     if [[ $_bin_exists ]]; then # if detected then continue
@@ -61,7 +71,8 @@ CheckBinPath() { # Check if the bin path exists
     else
         case $(uname -s) in
         ### Default bin path for each system here ###
-        Darwin) # macOS
+        # macOS
+        Darwin)
             _clang_path=$HOME/Qt/"$qt_ver"/clang_64
             ;;
         Linux)
@@ -100,24 +111,26 @@ Input \033[33m*\033[0m to re-generate .ts files for existing languages.
 You can create multiple .ts files by separating lang codes with space.\n"
         read -rp "  Input your language code: "
         case $REPLY in
-        "*" | all) # Update all existing .ts files
-            echo
-            cd $(dirname $0)
-            _ts_name=$(find . -name "*.ts")
-            echo -e "You are updating\033[33m all existing .ts files\033[0m."
-            ;;
-        "") # Avoid mis-press the Enter
-            echo
-            continue
-            ;;
-        *)
-            echo
-            for each in $REPLY; do
-                _name=locale_$each.ts
-                echo -e "Your .ts file name: \033[33m${_name}\033[0m"
-                _ts_name=$_name" $_ts_name"
-            done
-            ;;
+            # Update all existing .ts files
+            "*" | all) 
+                echo
+                cd $(dirname $0)
+                _ts_name=$(find . -name "*.ts")
+                echo -e "You are updating\033[33m all existing .ts files\033[0m."
+                ;;
+            # Avoid mis-press the Enter
+            "") 
+                echo
+                continue
+                ;;
+            *)
+                echo
+                for each in $REPLY; do
+                    _name=locale_$each.ts
+                    echo -e "Your .ts file name: \033[33m${_name}\033[0m"
+                    _ts_name=$_name" $_ts_name"
+                done
+                ;;
         esac
         Confirmation
         if [[ $? -eq 3 ]]; then break; fi
@@ -161,10 +174,12 @@ Main() {
             ;;
         esac
     done
+    # End of loop
     sleep 1
     Line "="
     echo -e "\033[32mFinished\033[0m"
     Countdown 30
     exit
 }
-Main
+
+# Main
